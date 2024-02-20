@@ -74,5 +74,11 @@ def print_grid(grid):
         print(string_i)
         iteration += 1
 
-place_ships("h", 4, 1)
+orientation_options = ['h','v']
+place_ships(random.choice(orientation_options), 5, 1)
+place_ships(random.choice(orientation_options), 4, 2)
+place_ships(random.choice(orientation_options), 3, 3)
+place_ships(random.choice(orientation_options), 3, 4)
+place_ships(random.choice(orientation_options), 2, 5)
+
 print_grid(main_grid)
