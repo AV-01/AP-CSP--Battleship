@@ -6,6 +6,7 @@ green = '\033[32m'
 yellow = '\033[93m'
 reset = '\033[0m'
 
+# This is what the player sees while playing the game. 0 means that it's just an empty cell with no guesses
 viewer_grid = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -18,6 +19,8 @@ viewer_grid = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
+
+# This is what the computer uses to place the ships, and it's used to mark where all
 main_grid = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -31,14 +34,14 @@ main_grid = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-
+# While the computer places a ship, check if it overlaps with any other ships
 def check_ship_overlap(ship_array):
     for i in ship_array:
         if not main_grid[i[1]][i[0]] == 0:
             return False
     return True
 
-
+# After placing a ship down, mark the "water" around it so that no other ship is placed adjacent to it(battleship rules)
 def change_adjacent_squares(coordinate,ship_code):
     # i is change in x coordinate, and j is change in y coordinate
     for i in range(-1, 2):
@@ -48,14 +51,14 @@ def change_adjacent_squares(coordinate,ship_code):
                 coordinate[1] + j][coordinate[0] + i] == 0:
                 main_grid[coordinate[1] + j][coordinate[0] + i] = ship_code+5
 
-
+# Changes the main grid and places the ship on it, then marks all the adjacent squares using the change_adjacent_squares function
 def change_grid(ship_array, ship_code):
     for i in ship_array:
         main_grid[i[1]][i[0]] = ship_code
     for x in ship_array:
         change_adjacent_squares(x,ship_code)
 
-
+# PLaces ships using their orientation and length onto the main grid using the previous functions.
 def place_ships(orientation, length, ship_code):
     ship_array_test = []
     if orientation == "h":
@@ -73,21 +76,18 @@ def place_ships(orientation, length, ship_code):
     else:
         place_ships(orientation, length, ship_code)
 
-
+# Prints a 2d array, which in this case is a battleship grid
 def print_grid(grid):
+    string_grid = [
+        [str(cell) for cell in row]
+        for row in viewer_grid
+    ]
     print("  1  2  3  4  5  6  7  8  9  10")
-    iteration = 65
-    for i in grid:
-        string_i = str(i)
-        string_i = string_i.replace("[", chr(iteration) + " ")
-        string_i = string_i.replace("]", '')
-        string_i = string_i.replace("'", "")
-        string_i = string_i.replace(",", " ")
-        string_i = string_i.replace("X", green + "X" + reset)
-        string_i = string_i.replace("O", red + "O" + reset)
-        print(string_i)
-        iteration += 1
+    row_values = ["A","B","C","D","E","F","G","H","I","J"]
+    for i in range(len(string_grid)):
+        print(row_values[i],'  '.join(string_grid[i]))
 
+# Creating the ships using the place_ships function
 orientation_options = ['h', 'v']
 place_ships(random.choice(orientation_options), 5, 1)
 place_ships(random.choice(orientation_options), 4, 2)
@@ -95,7 +95,10 @@ place_ships(random.choice(orientation_options), 3, 3)
 place_ships(random.choice(orientation_options), 3, 4)
 place_ships(random.choice(orientation_options), 2, 5)
 
+# Using the ship code to notate which ships have not been sunk yet
 ships_still_alive = [1,2,3,4,5]
+
+# Using the ship codes along with the ships_still_alive array to see which ships have crashed since the last time the function was called.
 def check_for_crashes():
     living_ships = []
     for i in main_grid:
