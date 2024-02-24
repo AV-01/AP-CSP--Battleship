@@ -1,12 +1,11 @@
 import random
-from colorama import Fore, Back, Style
 
 red = '\033[31m'
 green = '\033[32m'
 yellow = '\033[93m'
 reset = '\033[0m'
 
-# This is what the player sees while playing the game. 0 means that it's just an empty cell with no guesses
+# This is the grid that the player sees while playing the game. '0' means an empty cell with no guesses.
 viewer_grid = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
